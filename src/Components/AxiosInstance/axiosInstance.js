@@ -1,5 +1,5 @@
 import axios from "axios";
-const SERVERURL = "https://olive-server.oliveandlime.co.uk/"
+const SERVERURL = "http://localhost:5000/"
 
 const axiosInstance = axios.create({
   baseURL: SERVERURL,

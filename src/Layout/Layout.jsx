@@ -8,7 +8,7 @@ const Layout = () => {
     <div className="md:mx-28 font-meri bg-white">
       <Nav />
       <Outlet />
-      {/* <Footer/> */}
+      <Footer/>
     </div>
   );
 };
