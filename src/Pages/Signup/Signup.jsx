@@ -53,6 +53,7 @@ const Signup = () => {
     try {
     
         const result = await createUser(data.email, data.password);
+        updateUserProfile(data.name,'nophotourl')
         const googleUser = result.user;  
         console.log(result) 
         const user = {

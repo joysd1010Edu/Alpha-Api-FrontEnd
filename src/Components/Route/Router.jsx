@@ -4,6 +4,8 @@ import Home from "../../Pages/Home/Home";
 import Login from "../../Pages/Login/Login";
 import Signup from "../../Pages/Signup/Signup";
 import Error from "../../Pages/Error/Error";
+import Package from "../../Pages/Package/Package";
+import Payment from "../../Pages/Payment/Payment";
 
 
 const Router = createBrowserRouter([
@@ -24,8 +26,13 @@ const Router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "plans",
-        element: <Login />,
+        path: "plan",
+        element: <Package />,
+      },
+    
+      {
+        path: "payment",
+        element: <Payment />,
       },
     
       {
