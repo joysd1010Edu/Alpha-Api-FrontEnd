@@ -5,7 +5,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    
+      fontFamily: {
+        'cascade': ['Cascadia Code', 'sans-serif'], 
+        'meri': ['Merriweather', 'serif'], 
+        'display': ['Playfair Display', 'serif']
+      },
   },
   plugins: [],
 }
