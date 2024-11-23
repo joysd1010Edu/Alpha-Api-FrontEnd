@@ -1,5 +1,5 @@
 import axios from "axios";
-const SERVERURL = "https://alpha-api-n95y.onrender.com/"
+const SERVERURL = "https://alpha-api-n95y.onrender.com"
 // const SERVERURL = "http://localhost:5000/"
 
 const axiosInstance = axios.create({
