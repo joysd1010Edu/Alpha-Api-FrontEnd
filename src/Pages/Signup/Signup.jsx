@@ -20,41 +20,33 @@ const Signup = () => {
 
   const from = location.state?.from?.pathname || "/login";
 
+  const generateId = () => {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$&";
+    let result = "";
+    for (let i = 0; i < 16; i++) {
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+    return result;
+  };
+
   const onSubmit = (data) => {
     createUser(data.email, data.password)
       .then((result) => {
         const loggedUser = result.user;
-        const role = "user";
+       
         console.log(loggedUser);
 
-        updateUserProfile(data.name, data.photoURL);
+        updateUserProfile(data.name);
 
         const user = {
           name: data.name,
-          role: role,
           email: data.email,
-        };
-        fetch("https://kiddo-back-end.vercel.app/user", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify(user),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.insertedId) {
-              Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Successfully Added to database",
-                showConfirmButton: false,
-                timer: 1500,
-              });
 
-              navigate(from, { replace: true });
-            }
-          });
+        };
+       
       })
       .catch((error) => {
         console.log(error.message);
@@ -73,37 +65,23 @@ const Signup = () => {
             Please Register
           </h1>
           <hr className="w-1/2 mx-auto border-gray-500 border-2" />
-          <form onSubmit={handleSubmit(onSubmit)} className="card-body ">
-            <div className="form-control">
-              <label className="label">
-                <span className="text-xl text-[#1F2937] font-semibold label-text">Name</span>
-              </label>
-              <input
-                type="text"
-                {...register("name", { required: true })}
-                name="name"
-                placeholder="Name"
-                className="input bg-white input-bordered"
-              />
-              {errors.name && (
-                <span className="text-red-600">Name is required</span>
-              )}
-            </div>
-            <div className=" grid grid-cols-2 gap-2">
+          <form onSubmit={handleSubmit(onSubmit)} className="card-body py-5">
+           
+            <div className=" grid grid-cols-2 gap-2 md:gap-4">
             <div className="form-control">
               <label className="label ">
                 <span className="text-xl text-[#1F2937] font-semibold label-text">
-                  Photo URL
+                  Name
                 </span>
               </label>
               <input
                 type="text"
                 {...register("photoURL", { required: true })}
-                placeholder="Photo URL"
-                className="input  bg-white input-bordered"
+                placeholder="Name"
+                className="input px-2 bg-white input-bordered"
               />
               {errors.photoURL && (
-                <span className="text-red-600">Photo URL is required</span>
+                <span className="text-red-600">Name is required</span>
               )}
             </div>
             <div className="form-control">
@@ -115,7 +93,7 @@ const Signup = () => {
                 {...register("email", { required: true })}
                 name="email"
                 placeholder="email"
-                className="input bg-white  input-bordered"
+                className="input bg-white  px-2 input-bordered"
               />
               {errors.email && (
                 <span className="text-red-600">Email is required</span>
@@ -137,7 +115,7 @@ const Signup = () => {
                     pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/,
                   })}
                   placeholder="password"
-                  className="input  bg-white  input-bordered"
+                  className="input  bg-white px-2  input-bordered"
                 />
                 {errors.password?.type === "required" && (
                   <p className="text-red-500">Password is required</p>
@@ -167,7 +145,7 @@ const Signup = () => {
                   type="password"
                   id="confirm_pass"
                   placeholder="Enter your confirm password"
-                  className="w-full  bg-white  max-w-xs input input-bordered "
+                  className="w-full px-2  bg-white  max-w-xs input input-bordered "
                   {...register("confirmPassword", {
                     required: true,
                     validate: (value) =>
@@ -182,14 +160,12 @@ const Signup = () => {
               </div>{" "}
             </div>{" "}
             <label className="label text-center">
-              <a href="#" className="label-text-alt link link-hover ">
-                Forgot password?
-              </a>
+              
             </label>
             <p>{error && <span>{error}</span>}</p>
-            <div className=" form-control">
+            <div className=" form-control flex justify-around py-2">
               <input
-                className="btn btn-info"
+                className="btn btn-info rounded-xl bg-orange-400 px-5 text-white py-1 shadow-md duration-300 hover:shadow-orange-500"
                 type="submit"
                 value="Sign Up"
               />
