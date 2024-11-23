@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
-import useAuth from "./../../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import GoggleLogin from "../Googlelogin/Google";
 import { useState } from "react";
+import useAuth from "../../Components/Hooks/useAuth";
+import GoogleAuth from "../Login/GoogleAuth";
 const Signup = () => {
   const {
     register,
@@ -12,7 +12,7 @@ const Signup = () => {
     formState: { errors },
     watch,
   } = useForm();
-  const { createUser, updateUserProfile, setReload } = useAuth();
+  const { createUser, updateUserProfile,  } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -206,7 +206,7 @@ const Signup = () => {
           </p>
 
           <div className=" mx-8 pb-10">
-            <GoggleLogin />
+            <GoogleAuth />
           </div>
         </div>
       </div>

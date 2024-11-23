@@ -19,7 +19,7 @@ const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({});
-  const [userCredit, setUserCredit] = useState({});
+  
   const [loading, setLoading] = useState(true);
   const [reload, setReload] = useState(0);
 
@@ -56,10 +56,7 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (loggedUser) => {
       console.log('user initiated')
       setUser(loggedUser);
-      if(user==null){
-        console.log('user detachted')
-        setUserCredit({})
-      }
+     
       setLoading(false);
     });
 
@@ -69,8 +66,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const authInfo = {
-    user,userCredit,
-    setUserCredit,
+    user,
     loading,
     createUser,
     signIn,
