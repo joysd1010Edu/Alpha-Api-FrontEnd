@@ -6,6 +6,8 @@ import Signup from "../../Pages/Signup/Signup";
 import Error from "../../Pages/Error/Error";
 import Package from "../../Pages/Package/Package";
 import Payment from "../../Pages/Payment/Payment";
+import Privateroute from "../Private_Route/Privateroute";
+import Doc from "../../Pages/Doc/Doc";
 
 
 const Router = createBrowserRouter([
@@ -29,10 +31,14 @@ const Router = createBrowserRouter([
         path: "plan",
         element: <Package />,
       },
+      {
+        path: "doc",
+        element: <Doc />,
+      },
     
       {
         path: "payment",
-        element: <Payment />,
+        element: <Privateroute><Payment /></Privateroute>,
       },
     
       {

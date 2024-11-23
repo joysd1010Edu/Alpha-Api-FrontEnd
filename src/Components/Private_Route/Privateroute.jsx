@@ -1,7 +1,7 @@
 import {useContext} from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
-import { Dna } from 'react-loader-spinner'
+import { DNA } from 'react-loader-spinner'
 import { AuthContext } from '../Provider/AuthProvider';
 
 
@@ -13,7 +13,7 @@ const Privateroute = ({children}) => {
    
 
     if(loading){
-        return <div className='flex justify-around'><Dna
+        return <div className='flex justify-around'><DNA
         visible={true}
         height="100"
         width="180"

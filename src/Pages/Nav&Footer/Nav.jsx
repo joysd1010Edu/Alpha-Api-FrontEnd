@@ -57,7 +57,7 @@ const Nav = () => {
           </div>
           <hr className="w-0 border-white group-hover:w-full transition-all duration-500 border-2 group-hover:border-black" />
         </NavLink>
-        <NavLink to="/" className="group">
+        <NavLink to="/doc" className="group">
           <div className="md:px-5 md:text-xl md:font-medium">
             <h1>Documentation</h1>
           </div>

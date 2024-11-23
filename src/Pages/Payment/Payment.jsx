@@ -211,7 +211,7 @@ const Payment = () => {
 
   return (
     <div className="bg-slate-200 px-10">
-      <div className="grid grid-cols-2 w-full py-10 gap-5">
+      <div className="grid md:grid-cols-2 w-full py-10 gap-5">
         <div id="detail" className=" pt-5 pb-5  bg-white rounded-md ">
           <h1 className="text-blue-700 text-xl font-bold  text-center">
             Products detail
