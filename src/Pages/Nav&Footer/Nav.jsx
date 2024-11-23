@@ -21,6 +21,7 @@ const Nav = () => {
     try {
       const response = await axiosInstance.get(`/user/email/${user.email}`);
       setUserCredit(response.data);
+      console.log(response.data)
 
       // Open the modal after the state is set
       document.getElementById("my_modal_1").showModal();
@@ -68,7 +69,7 @@ const Nav = () => {
             <div onClick={ShowDetails} className="group">
               <div className="md:px-5 md:text-xl md:font-medium flex items-center gap-2">
                 <LuUserCircle2 size={35} />
-                <h1>{user.displayName}</h1>
+                <h1>{user?.displayName||userCredit?.username}</h1>
               </div>
               <hr className="w-0 border-white group-hover:w-full transition-all duration-500 border-2 group-hover:border-black" />
             </div>
@@ -102,10 +103,10 @@ const Nav = () => {
           {userCredit ? (
             <>
               <h3 className="font-bold text-center">
-                Hello!, {userCredit.username}
+                Hello!, {userCredit?.username}
               </h3>
               <p className="md:text-xl text-center">
-                You have {userCredit.credit} credits
+                You have {userCredit?.credit} credits
               </p>
             </>
           ) : (
@@ -113,7 +114,7 @@ const Nav = () => {
           )}
           <div className=" flex items-center py-3 gap-3">
               <h1>Your API key is :</h1>
-              <CopiableSection text={userCredit.uid || "No UID Available"} />
+              <CopiableSection text={userCredit?.uid || "No UID Available"} />
           </div>
           <div className="modal-action">
             <form method="dialog">

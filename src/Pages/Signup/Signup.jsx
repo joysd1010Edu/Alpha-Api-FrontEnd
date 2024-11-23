@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { useState } from "react";
 import useAuth from "../../Components/Hooks/useAuth";
 import GoogleAuth from "../Login/GoogleAuth";
+import axiosInstance from "../../Components/AxiosInstance/axiosInstance";
 const Signup = () => {
   const {
     register,
@@ -12,7 +13,7 @@ const Signup = () => {
     formState: { errors },
     watch,
   } = useForm();
-  const { createUser, updateUserProfile,  } = useAuth();
+  const { createUser, updateUserProfile } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,32 +33,83 @@ const Signup = () => {
     return result;
   };
 
-  const onSubmit = (data) => {
-    createUser(data.email, data.password)
-      .then((result) => {
-        const loggedUser = result.user;
-       
-        console.log(loggedUser);
+  const onSubmit = async (data) => {
+    console.log("working on form data: ",data)
+    let id;
+    let isUnique = false;
+    while (!isUnique) {
+      id = generateId();
+      try {
+        const userID = await axiosInstance.get(`user/${id}`);
+        if (!userID.data.changeID) {
+          isUnique = true;
+        }
+      } catch (error) {
+        console.error("Error checking ID uniqueness:", error);
+        return;
+      }
+    }
 
-        updateUserProfile(data.name);
-
+    try {
+    
+        const result = await createUser(data.email, data.password);
+        const googleUser = result.user;  
+        console.log(result) 
         const user = {
-          name: data.name,
+          uid: id,
+          credit: 0,
           email: data.email,
-
+          username: data.name,
         };
-       
-      })
-      .catch((error) => {
-        console.log(error.message);
-        setError(error.message);
-      });
-  };
+        console.log(user)
+    
+        // Send user data to backend
+        const response = await axiosInstance.post('/user', user, {
+          headers: {
+            'Content-Type': "application/json",
+          },
+        });
+    
+        if (response.data.success||response.status==200||response.status==201) {
+            console.log(response)
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Successfully Logged in",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              
+              navigate(from, { replace: true });
+            }
+        
+        else{
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Somthing went wrong, please",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+        }
+    
+        
+      } catch (error) {
+        console.error("Error during sign-in or user creation:", error);
+      }
+    };
 
+
+
+
+
+
+    
   return (
-    <div className=" bg-white pt-20px-3 md:px-28 ">
+    <div className=" bg-white md:pt-20 px-3 md:px-28 ">
       <div className="grid grid-cols-1 md:grid-cols-2 items-center ">
         <div>
+            <h1 className=" py-3 md:hidden text-3xl text-center font-bold">Sign Up</h1>
           <img src="https://i.postimg.cc/MTyTTzQn/ezgif-com-optimize-1.gif" />
         </div>
         <div className="">
@@ -66,39 +118,41 @@ const Signup = () => {
           </h1>
           <hr className="w-1/2 mx-auto border-gray-500 border-2" />
           <form onSubmit={handleSubmit(onSubmit)} className="card-body py-5">
-           
             <div className=" grid grid-cols-2 gap-2 md:gap-4">
-            <div className="form-control">
-              <label className="label ">
-                <span className="text-xl text-[#1F2937] font-semibold label-text">
-                  Name
-                </span>
-              </label>
-              <input
-                type="text"
-                {...register("photoURL", { required: true })}
-                placeholder="Name"
-                className="input px-2 bg-white input-bordered"
-              />
-              {errors.photoURL && (
-                <span className="text-red-600">Name is required</span>
-              )}
+              <div className="form-control">
+                <label className="label ">
+                  <span className="text-xl text-[#1F2937] font-semibold label-text">
+                    Name
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  {...register("name", { required: true })}
+                  placeholder="Name"
+                  className="input px-2 bg-white input-bordered"
+                />
+                {errors.name && (
+                  <span className="text-red-600">Name is required</span>
+                )}
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="text-xl text-[#1F2937] font-semibold label-text">
+                    Email
+                  </span>
+                </label>
+                <input
+                  type="email"
+                  {...register("email", { required: true })}
+                  name="email"
+                  placeholder="email"
+                  className="input bg-white  px-2 input-bordered"
+                />
+                {errors.email && (
+                  <span className="text-red-600">Email is required</span>
+                )}
+              </div>
             </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="text-xl text-[#1F2937] font-semibold label-text">Email</span>
-              </label>
-              <input
-                type="email"
-                {...register("email", { required: true })}
-                name="email"
-                placeholder="email"
-                className="input bg-white  px-2 input-bordered"
-              />
-              {errors.email && (
-                <span className="text-red-600">Email is required</span>
-              )}
-            </div></div>
             <div className=" grid grid-cols-2 gap-2">
               <div className="form-control">
                 <label className="label">
@@ -138,7 +192,7 @@ const Signup = () => {
               <div className="form-control">
                 <label className="label">
                   <span className="text-xl text-[#1F2937] font-semibold label-text flex gap-2">
-                    Confirm <span className="hidden md:block">Password</span> 
+                    Confirm <span className="hidden md:block">Password</span>
                   </span>
                 </label>
                 <input
@@ -159,9 +213,7 @@ const Signup = () => {
                 )}
               </div>{" "}
             </div>{" "}
-            <label className="label text-center">
-              
-            </label>
+            <label className="label text-center"></label>
             <p>{error && <span>{error}</span>}</p>
             <div className=" form-control flex justify-around py-2">
               <input
